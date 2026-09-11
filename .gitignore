@@ -15,3 +15,6 @@ __pycache__/
 # OS
 Thumbs.db
 .DS_Store
+
+# Azure CLI local defaults (machine-specific)
+.azure/
