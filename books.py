@@ -1,4 +1,4 @@
-from fastapi import Body, FastAPI
+from fastapi import Body, FastAPI, HTTPException, status
 
 app = FastAPI()
 
@@ -20,6 +20,10 @@ async def read_book(book_title: str):
     for book in BOOKS:
         if book['title'].casefold() == book_title.casefold():
             return book
+    raise HTTPException(
+        status_code=status.HTTP_404_NOT_FOUND,
+        detail="Book not found"
+    )
 
 @app.get("/books/")
 async def read_books_by_category(category: str):
@@ -38,10 +42,10 @@ async def read_author_category_by_query(book_author: str, category: str):
             books_to_return.append(book)
     return books_to_return
 
-@app.post("/books/create_book")
+@app.post("/books/create_book", status_code=status.HTTP_201_CREATED)
 async def create_book(new_book=Body()):
     BOOKS.append(new_book)
-    #return BOOKS
+    return new_book
 
 @app.put("/books/update_book")
 async def update_book(updated_book=Body()):
@@ -49,14 +53,22 @@ async def update_book(updated_book=Body()):
         if book.get('title').casefold() == updated_book.get('title').casefold():
             BOOKS[index] = updated_book
             return BOOKS[index]
-    return {"error": "Book not found"}
+    raise HTTPException(
+        status_code=status.HTTP_404_NOT_FOUND,
+        detail="Book not found"
+    )
 
-@app.delete("/books/delete_book/{book_title}")
+@app.delete("/books/delete_book/{book_title}",
+            status_code=status.HTTP_204_NO_CONTENT)
 async def delete_book(book_title: str):
     for index, book in enumerate(BOOKS):
         if book.get('title').casefold() == book_title.casefold():
             BOOKS.pop(index)
-            break
+            return
+    raise HTTPException(
+        status_code=status.HTTP_404_NOT_FOUND,
+        detail="Book not found"
+    )
 
 @app.get("/books/byauthor/{author}")
 async def read_books_by_author(author: str):
