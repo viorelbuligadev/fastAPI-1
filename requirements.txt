@@ -1,0 +1,4 @@
+# Install with: pip install -r requirements.txt
+# "standard" pulls in uvicorn, fastapi-cli, httpx, jinja2,
+# python-multipart and email-validator.
+fastapi[standard]==0.141.1
