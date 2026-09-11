@@ -1,0 +1,17 @@
+# Virtual environment
+fastapienv/
+venv/
+.venv/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+
+# Environment
+.env
+
+# OS
+Thumbs.db
+.DS_Store
